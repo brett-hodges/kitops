@@ -39,7 +39,8 @@ jobs:
           repository: brett-hodges/homebrew-kitops
           ref: 'main'
           path: homebrew-kitops
-          token: ${{ secrets.GITHUB_TOKEN }}
+          #token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MY_PAT}}
       - name: List dirs after checkout homebrew-kitops
         run: |
             ls
@@ -52,7 +53,8 @@ jobs:
             popd
       - name: Commit Homebrew Formula to Tap
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_PAT }}
           TAG_NAME: ${{ inputs.release_tag}}
           ##### CHANGE REPO TO jozu-ai/homebrew-kitops
           REPO: "brett-hodges/homebrew-kitops"
