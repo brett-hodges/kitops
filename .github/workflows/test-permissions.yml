@@ -69,7 +69,9 @@ jobs:
             git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
             git add --all
             git commit -m "homebrew: update Homebrew Tap Formula for ${{ github.ref_name }}"
-            git push origin "${PR_BRANCH}"
+            git config --unset-all http.https://github.com/.extraheader
+            git push --set-upstream https://user:$GITHUB_TOKEN@github.com/brett-hodges/homebrew-kitops "${PR_BRANCH}"
+            #git push origin "${PR_BRANCH}"
             gh pr create --fill --base main --head "${PR_BRANCH}"
             git checkout "${CURRENT_BRANCH}"
             popd
