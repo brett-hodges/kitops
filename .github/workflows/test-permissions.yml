@@ -60,7 +60,7 @@ jobs:
           REPO: "brett-hodges/homebrew-kitops"
         run: |
             pushd homebrew-kitops
-            touch kitops.rb
+            rm kitops.rb
             CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
             PR_BRANCH="${{ github.ref_name }}-homebrew-tap-update"
             git fetch origin main
