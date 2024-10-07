@@ -21,10 +21,10 @@ env:
   TAG_NAME: ${{ inputs.release_tag}}
   PRIMARY_REPO_OWNER: brett-hodges
   PRIMARY_REPO_NAME: kitops
-  PRIMARY_REPO: $PRIMARY_REPO_OWNER/$PRIMARY_REPO_NAME
+  PRIMARY_REPO: ${PRIMARY_REPO_OWNER}/${PRIMARY_REPO_NAME}
   SECONDARY_REPO_OWNER: brett-hodges
   SECONDARY_REPO_NAME: homebrew-kitops
-  SECONDARY_REPO: $SECONDARY_REPO_OWNER/$SECONDARY_REPO_NAME
+  SECONDARY_REPO: ${SECONDARY_REPO_OWNER}/${SECONDARY_REPO_NAME}
 
 
 permissions:
@@ -39,34 +39,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # checkout the homebrew-kitops repository (jozu-ai/homebrew-kitops)
-      - name: Checkout $SECONDARY_REPO from $PRIMARY_REPO
+      - name: Checkout ${SECONDARY_REPO} from ${PRIMARY_REPO}
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: $SECONDARY_REPO
+          repository: ${SECONDARY_REPO}
           ref: 'main'
-          path: $SECONDARY_REPO_NAME
-          token: $GITHUB_TOKEN
+          path: ${SECONDARY_REPO_NAME}
+          token: ${GITHUB_TOKEN}
 
-      - name: List contents after checking out $SECONDARY_REPO
+      - name: List contents after checking out ${SECONDARY_REPO}
         run: |
             ls
   
-      - name: List contents of $SECONDARY_REPO
+      - name: List contents of ${SECONDARY_REPO}
         run: |
             shopt -s failglob
-            pushd $SECONDARY_REPO_NAME
+            pushd ${SECONDARY_REPO_NAME}
             ls
             popd
 
       - name: Update Homebrew Formula File
         run: |
-            pushd $SECONDARY_REPO_NAME
+            pushd ${SECONDARY_REPO_NAME}
             date +%s > kitops.rb
             popd
       
       - name: Commit Homebrew Formula to Tap
         run: |
-            pushd $SECONDARY_REPO_NAME
+            pushd ${SECONDARY_REPO_NAME}
             CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
             PR_BRANCH="${{ github.ref_name }}-homebrew-tap-update"
             git fetch origin main
@@ -78,7 +78,7 @@ jobs:
             git add --all
             git commit -m "homebrew: update Homebrew Tap Formula for ${{ github.ref_name }}"
             git config --unset-all http.https://github.com/.extraheader
-            git push --set-upstream https://user:$GITHUB_TOKEN@github.com/$SECONDARY_REPO "${PR_BRANCH}"
+            git push --set-upstream https://user:${GITHUB_TOKEN}@github.com/${SECONDARY_REPO} "${PR_BRANCH}"
             #git push origin "${PR_BRANCH}"
             gh pr create --fill --base main --head "${PR_BRANCH}"
             git checkout "${CURRENT_BRANCH}"
