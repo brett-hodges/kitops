@@ -38,6 +38,7 @@ jobs:
           repository: brett-hodges/homebrew-kitops
           ref: 'main'
           path: homebrew-kitops
+          token: ${{ secrets.MY_PAT }}
 
       - name: List dirs after checkout homebrew-kitops
         run: |
