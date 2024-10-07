@@ -35,15 +35,12 @@ permissions:
 jobs:
   test-permissions:
     runs-on: ubuntu-latest
-    env:
-      PRIMARY_REPO: $PRIMARY_REPO_OWNER/$PRIMARY_REPO_NAME
-      SECONDARY_REPO: $SECONDARY_REPO_OWNER/$SECONDARY_REPO_NAME
     steps:
       # checkout the homebrew-kitops repository (jozu-ai/homebrew-kitops)
-      - name: Checkout $SECONDARY_REPO from $PRIMARY_REPO
+      - name: Checkout $SECONDARY_REPO_NAME from $PRIMARY_REPO_NAME
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: $SECONDARY_REPO
+          repository: '$SECONDARY_REPO_OWNER/$SECONDARY_REPO_NAME'
           ref: 'main'
           path: $SECONDARY_REPO_NAME
           token: $GITHUB_TOKEN
