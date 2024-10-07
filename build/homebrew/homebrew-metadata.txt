@@ -1,3 +1,0 @@
-"eb92bb276e7f6306529b12a87596c3f48be326f743ff535fdc641d53a3d2b653" "https://github.com/brett-hodges/kitops/releases/download/v5.0.1/kitops-linux-arm64.tar.gz" linux-arm64 5.0.1
-"afcf6b0add91f42235b57ba86768f2aa1278c3e2075060ddfba67dce9ff027e6" "https://github.com/brett-hodges/kitops/releases/download/v5.0.1/kitops-linux-i386.tar.gz" linux-i386 5.0.1
-"c96adf52709106127fda6df8de96ad72d62a74a8063da417725829225ba7fd45" "https://github.com/brett-hodges/kitops/releases/download/v5.0.1/kitops-linux-x86_64.tar.gz" linux-x86_64 5.0.1
