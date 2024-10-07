@@ -3,11 +3,6 @@ name: Permissions Testing
 on: 
   workflow_dispatch:
     inputs:
-      skip_signing:
-        description: 'Skip code signing'
-        required: true
-        default: false
-        type: boolean
       release_tag:
         description: 'Release tag'
         required: true
