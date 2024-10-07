@@ -179,7 +179,6 @@ jobs:
             shopt -s failglob
             mkdir homebrew-files
             ls
-            popd
 
      # Copy the awk script and template to the homebrew-files dir.
      # These will be used later to build the homebrew recipe file.
