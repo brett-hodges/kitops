@@ -316,14 +316,14 @@ jobs:
           path: homebrew-files
           merge-multiple: true
   
-      - name: List dirs after downloading homebrew-recipe artifact
+      - name: List dirs after downloading homebrew-files artifact
         run: |
             ls
   
-      - name: List contents of homebrew-recipe
+      - name: List contents of homebrew-files
         run: |
             shopt -s failglob
-            pushd homebrew-recipe
+            pushd homebrew-files
             ls
             popd
 
@@ -356,7 +356,7 @@ jobs:
           awk -f create-homebrew-recipe.awk homebrew-metadata.txt
           popd
 
-      - name: List contents of homebrew-recipe dir
+      - name: List contents of homebrew-files dir
         run: |
           shopt -s failglob
           pushd homebrew-files
