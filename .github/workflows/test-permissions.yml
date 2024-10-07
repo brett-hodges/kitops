@@ -1,5 +1,10 @@
 name: Permissions Testing
 
+# This will test if a Github Action run from a primary repository 
+# ('kitops') can push to a different repository ('homebrew-kitops')
+#
+# The test is successful if the workflow completes successfully.
+
 on: 
   workflow_dispatch:
     inputs:
@@ -10,11 +15,18 @@ on:
   push:
     tags:
       - 'v*'
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  INIT_IMAGE_NAME: ${{ github.repository }}-init
   
+env:
+  GITHUB_TOKEN: ${{ secrets.MY_PAT}}
+  TAG_NAME: ${{ inputs.release_tag}}
+  PRIMARY_REPO_OWNER: brett-hodges
+  PRIMARY_REPO_NAME: kitops
+  PRIMARY_REPO: $PRIMARY_REPO_OWNER/$PRIMARY_REPO_NAME
+  SECONDARY_REPO_OWNER: brett-hodges
+  SECONDARY_REPO_NAME: homebrew-kitops
+  SECONDARY_REPO: $SECONDARY_REPO_OWNER/$SECONDARY_REPO_NAME
+
+
 permissions:
   contents: write
   pull-requests: write
@@ -27,35 +39,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # checkout the homebrew-kitops repository (jozu-ai/homebrew-kitops)
-      - name: Checkout homebrew-kitops
+      - name: Checkout $SECONDARY_REPO from $PRIMARY_REPO
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          ###### CHANGE THIS TO jozu-ai/homebrew-kitops ######
-          repository: brett-hodges/homebrew-kitops
+          repository: $SECONDARY_REPO
           ref: 'main'
-          path: homebrew-kitops
-          #token: ${{ secrets.GITHUB_TOKEN }}
-          token: ${{ secrets.MY_PAT}}
-      - name: List dirs after checkout homebrew-kitops
+          path: $SECONDARY_REPO_NAME
+          token: $GITHUB_TOKEN
+
+      - name: List contents after checking out $SECONDARY_REPO
         run: |
             ls
   
-      - name: List contents of homebrew-kitops
+      - name: List contents of $SECONDARY_REPO
         run: |
             shopt -s failglob
-            pushd homebrew-kitops
+            pushd $SECONDARY_REPO_NAME
             ls
             popd
-      - name: Commit Homebrew Formula to Tap
-        env:
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.MY_PAT }}
-          TAG_NAME: ${{ inputs.release_tag}}
-          ##### CHANGE REPO TO jozu-ai/homebrew-kitops
-          REPO: "brett-hodges/homebrew-kitops"
+
+      - name: Update Homebrew Formula File
         run: |
-            pushd homebrew-kitops
-            rm kitops.rb
+            pushd $SECONDARY_REPO_NAME
+            date +%s > kitops.rb
+            popd
+      
+      - name: Commit Homebrew Formula to Tap
+        run: |
+            pushd $SECONDARY_REPO_NAME
             CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
             PR_BRANCH="${{ github.ref_name }}-homebrew-tap-update"
             git fetch origin main
@@ -67,7 +78,7 @@ jobs:
             git add --all
             git commit -m "homebrew: update Homebrew Tap Formula for ${{ github.ref_name }}"
             git config --unset-all http.https://github.com/.extraheader
-            git push --set-upstream https://user:$GITHUB_TOKEN@github.com/brett-hodges/homebrew-kitops "${PR_BRANCH}"
+            git push --set-upstream https://user:$GITHUB_TOKEN@github.com/$SECONDARY_REPO "${PR_BRANCH}"
             #git push origin "${PR_BRANCH}"
             gh pr create --fill --base main --head "${PR_BRANCH}"
             git checkout "${CURRENT_BRANCH}"
