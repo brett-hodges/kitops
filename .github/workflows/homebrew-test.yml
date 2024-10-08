@@ -314,7 +314,8 @@ jobs:
           ##### CHANGE REPO TO jozu-ai/homebrew-kitops
           REPO: "brett-hodges/homebrew-kitops"
         run: |
-            cp -f ./homebrew-files/*.* ./homebrew-kitops/.
+            cp -f ./homebrew-files/homebrew-metadata.txt ./homebrew-kitops/.
+            cp -f ./homebrew-files/kitops.rb ./homebrew-kitops/.
             pushd homebrew-kitops
             CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
             PR_BRANCH="${{ github.ref_name }}-homebrew-tap-update"
