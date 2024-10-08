@@ -1,4 +1,4 @@
-name: Homebrew Testing
+name: Release with Platform builds
 
 on: 
   workflow_dispatch:
